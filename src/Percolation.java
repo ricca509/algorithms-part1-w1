@@ -10,7 +10,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private boolean[] grid;
-    private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF fullyConnectedUf, topOnlyConnectedUf;
     private int cols;
     private int virtualTopIndex;
     private int virtualBottomIndex;
@@ -18,20 +18,25 @@ public class Percolation {
 
     public Percolation(int n) {
         // create n-by-n grid, with all sites blocked
-        if (n <= 0)
-            throw new IllegalArgumentException("n needs to be > 0");
+        if (n <= 0) throw new IllegalArgumentException("n needs to be > 0");
 
         this.cols = n;
         this.grid = new boolean[n * n];
-        this.uf = new WeightedQuickUnionUF(n * n + 2);
+        this.fullyConnectedUf = new WeightedQuickUnionUF(n * n + 2);
+        this.topOnlyConnectedUf = new WeightedQuickUnionUF(n * n + 2);
         this.virtualTopIndex = n * n;
         this.virtualBottomIndex = n * n + 1;
         this.openSites = 0;
 
         // Connect virtual top to first row
-        for (int i = 0; i < this.cols; i++) this.uf.union(this.virtualTopIndex, i);
+        for (int i = 0; i < this.cols; i++) {
+            this.fullyConnectedUf.union(this.virtualTopIndex, i);
+            this.topOnlyConnectedUf.union(this.virtualTopIndex, i);
+        }
         // Connect virtual bottom to last row
-        for (int i = n * n - this.cols; i < n * n; i++) this.uf.union(this.virtualBottomIndex, i);
+        for (int i = n * n - this.cols; i < n * n; i++) {
+            this.fullyConnectedUf.union(this.virtualBottomIndex, i);
+        }
     }
 
     private boolean areIndexesInRange(int row, int col) {
@@ -68,7 +73,8 @@ public class Percolation {
                 this.isOpen(adjacent[0], adjacent[1])) {
                 int adjacentOpenSite = this.xyTo1D(adjacent[0], adjacent[1]);
 
-                this.uf.union(pointToBeOpened, adjacentOpenSite);
+                this.fullyConnectedUf.union(pointToBeOpened, adjacentOpenSite);
+                this.topOnlyConnectedUf.union(pointToBeOpened, adjacentOpenSite);
             }
         }
     }
@@ -82,7 +88,7 @@ public class Percolation {
     public boolean isFull(int row, int col) {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
 
-        return this.isOpen(row, col) && this.uf.connected(this.xyTo1D(row, col), this.virtualTopIndex);
+        return this.isOpen(row, col) && this.topOnlyConnectedUf.connected(this.xyTo1D(row, col), this.virtualTopIndex);
     }
 
     public int numberOfOpenSites() {
@@ -90,7 +96,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return this.uf.connected(this.virtualTopIndex, this.virtualBottomIndex);
+        return this.fullyConnectedUf.connected(this.virtualTopIndex, this.virtualBottomIndex);
     }
 
     public static void main(String[] args) {
