@@ -60,9 +60,11 @@ public class Percolation {
 
     public void open(int row, int col) {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
+        if (this.isOpen(row, col)) return;
+
         int pointToBeOpened = this.xyTo1D(row, col);
 
-        // open site (row, col) if it is not open already
+        // open site (row, col)
         this.grid[pointToBeOpened] = true;
         // Connect it to all open adjacent sites:
         int[][] adjacents = this.getAdjacentSites(row, col);

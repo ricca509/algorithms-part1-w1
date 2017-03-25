@@ -35,9 +35,6 @@ public class PercolationStats {
 
             if (!p.isOpen(siteRow, siteCol)) {
                 p.open(siteRow, siteCol);
-
-                System.out.println("Opened: " + p.numberOfOpenSites());
-                System.out.println("Percolates: " + p.percolates());
             }
         }
 
