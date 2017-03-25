@@ -1,8 +1,11 @@
 /******************************************************************************
- *  Compilation: javac Percolation.java
- *  Execution: java Percolation
- *  Dependencies:
- *  Riccardo Coppola
+ *  We model a percolation system using an n-by-n grid of sites.
+ *  Each site is either open or blocked. A full site is an open site that
+ *  can be connected to an open site in the top row via a chain of neighboring
+ *  (left, right, up, down) open sites. We say the system percolates if
+ *  there is a full site in the bottom row. In other words,
+ *  a system percolates if we fill all open sites connected to the top row
+ *  and that process fills some open site on the bottom row.
  *
  ******************************************************************************/
 
@@ -26,19 +29,16 @@ public class Percolation {
         this.openSites = 0;
     }
 
-    private void connectVirtualEdges() {
-        // Connect virtual top to first row
-        for (int i = 0; i < this.cols; i++) {
-            if (this.isOpen(i)) {
-                this.fullyConnectedUf.union(this.virtualTopIndex, i);
-                this.topOnlyConnectedUf.union(this.virtualTopIndex, i);
-            }
+    private void connectVirtualEdges(int point) {
+        if (point >= 0 && point < this.cols) {
+            // Connect virtual top to first row
+            this.fullyConnectedUf.union(this.virtualTopIndex, point);
+            this.topOnlyConnectedUf.union(this.virtualTopIndex, point);
         }
-        // Connect virtual bottom to last row
-        for (int i = this.cols * this.cols - this.cols; i < this.cols * this.cols; i++) {
-            if (this.isOpen(i)) {
-                this.fullyConnectedUf.union(this.virtualBottomIndex, i);
-            }
+
+        if (point >= this.cols * this.cols - this.cols && point < this.cols * this.cols) {
+            // Connect virtual bottom to last row
+            this.fullyConnectedUf.union(this.virtualBottomIndex, point);
         }
     }
 
@@ -76,7 +76,7 @@ public class Percolation {
             }
         }
 
-        this.connectVirtualEdges();
+        this.connectVirtualEdges(pointToBeOpened);
     }
 
     private boolean isOpen(int n) {
