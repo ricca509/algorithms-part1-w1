@@ -24,15 +24,21 @@ public class Percolation {
         this.virtualTopIndex = n * n;
         this.virtualBottomIndex = n * n + 1;
         this.openSites = 0;
+    }
 
+    private void connectVirtualEdges() {
         // Connect virtual top to first row
         for (int i = 0; i < this.cols; i++) {
-            this.fullyConnectedUf.union(this.virtualTopIndex, i);
-            this.topOnlyConnectedUf.union(this.virtualTopIndex, i);
+            if (this.isOpen(i)) {
+                this.fullyConnectedUf.union(this.virtualTopIndex, i);
+                this.topOnlyConnectedUf.union(this.virtualTopIndex, i);
+            }
         }
         // Connect virtual bottom to last row
-        for (int i = n * n - this.cols; i < n * n; i++) {
-            this.fullyConnectedUf.union(this.virtualBottomIndex, i);
+        for (int i = this.cols * this.cols - this.cols; i < this.cols * this.cols; i++) {
+            if (this.isOpen(i)) {
+                this.fullyConnectedUf.union(this.virtualBottomIndex, i);
+            }
         }
     }
 
@@ -45,12 +51,7 @@ public class Percolation {
     }
 
     private int[][] getAdjacentSites(int row, int col) {
-        return new int[][]{
-            {row - 1, col},
-            {row + 1, col},
-            {row, col - 1},
-            {row, col + 1}
-        };
+        return new int[][]{ {row - 1, col}, {row + 1, col}, {row, col - 1}, {row, col + 1} };
     }
 
     public void open(int row, int col) {
@@ -74,6 +75,12 @@ public class Percolation {
                 this.topOnlyConnectedUf.union(pointToBeOpened, adjacentOpenSite);
             }
         }
+
+        this.connectVirtualEdges();
+    }
+
+    private boolean isOpen(int n) {
+        return this.grid[n];
     }
 
     public boolean isOpen(int row, int col) {
