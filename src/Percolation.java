@@ -23,29 +23,13 @@ public class Percolation {
         this.cols = n;
         this.grid = new boolean[n * n];
         this.uf = new WeightedQuickUnionUF(n * n + 2);
-        this.setVirtualTopIndex(n * n);
-        this.setVirtualBottomIndex(n * n + 1);
+        this.virtualTopIndex = n * n;
+        this.virtualBottomIndex = n * n + 1;
 
         // Connect virtual top to first row
-        for (int i = 0; i < this.cols - 1; i++) this.uf.union(this.getVirtualTopIndex(), i);
+        for (int i = 0; i < this.cols - 1; i++) this.uf.union(this.virtualTopIndex, i);
         // Connect virtual bottom to last row
-        for (int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.getVirtualBottomIndex(), i);
-    }
-
-    private int getVirtualTopIndex() {
-        return virtualTopIndex;
-    }
-
-    private void setVirtualTopIndex(int virtualTopIndex) {
-        this.virtualTopIndex = virtualTopIndex;
-    }
-
-    private int getVirtualBottomIndex() {
-        return virtualBottomIndex;
-    }
-
-    private void setVirtualBottomIndex(int virtualBottomIndex) {
-        this.virtualBottomIndex = virtualBottomIndex;
+        for (int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.virtualBottomIndex, i);
     }
 
     private boolean areIndexesInRange(int row, int col) {
@@ -103,7 +87,7 @@ public class Percolation {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
         int point = this.xyTo1D(row, col);
 
-        boolean connected = this.uf.connected(point, this.getVirtualTopIndex());
+        boolean connected = this.uf.connected(point, this.virtualTopIndex);
 
         return this.isOpen(row, col) && connected;
     }
@@ -118,7 +102,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return this.uf.connected(this.getVirtualTopIndex(), this.getVirtualBottomIndex());
+        return this.uf.connected(this.virtualTopIndex, this.virtualBottomIndex);
     }
 
     public static void main(String[] args) {
