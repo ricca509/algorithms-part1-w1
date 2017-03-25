@@ -1,6 +1,10 @@
-/*----------------------------------------------------------------
- *  Author:        Riccardo Coppola
- *----------------------------------------------------------------*/
+/******************************************************************************
+ *  Compilation: javac Percolation.java
+ *  Execution: java Percolation
+ *  Dependencies:
+ *  Riccardo Coppola
+ *
+ ******************************************************************************/
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
