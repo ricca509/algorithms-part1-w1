@@ -1,17 +1,5 @@
 /*----------------------------------------------------------------
- *  Author:        Kevin Wayne
- *  Written:       5/3/1997
- *  Last updated:  8/7/2006
- *
- *  Compilation:   javac HelloWorld.java
- *  Execution:     java HelloWorld
- *
- *  Prints "Hello, World". By tradition, this is everyone's
- *  first program.
- *
- *  % java HelloWorld
- *  Hello, World
- *
+ *  Author:        Riccardo Coppola
  *----------------------------------------------------------------*/
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
@@ -64,7 +52,9 @@ public class Percolation {
             this.grid[x] = false; // all sites blocked
         }
 
+        // Connect virtual top to first row
         for(int i = 0; i < this.cols - 1; i++) this.uf.union(this.getVirtualTopIndex(), i);
+        // Connect virtual bottom to last row
         for(int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.getVirtualBottomIndex(), i);
     }
 
@@ -75,14 +65,13 @@ public class Percolation {
         // open site (row, col) if it is not open already
         this.grid[pointToBeOpened] = true;
         // Connect it to all open adjacent sites:
-        // - get list of open adjacent sites
-        // - connect the point to all of them
         int[][] adjacents = this.getAdjacentSites(row, col);
 
-
         for (int[] adjacent : adjacents) {
-            if (this.areIndexesInRange(adjacent[0],adjacent[1]) && this.isOpen(adjacent[0], adjacent[1])) {
+            if (this.areIndexesInRange(adjacent[0],adjacent[1]) &&
+                this.isOpen(adjacent[0], adjacent[1])) {
                 int adjacentOpenSite = this.xyTo1D(adjacent[0], adjacent[1]);
+
                 this.uf.union(pointToBeOpened, adjacentOpenSite);
             }
         }
@@ -91,7 +80,6 @@ public class Percolation {
     public boolean isOpen(int row, int col) {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
 
-        // is site (row, col) open?
         return this.grid[this.xyTo1D(row, col)];
     }
 
