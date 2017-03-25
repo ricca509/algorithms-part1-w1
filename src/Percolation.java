@@ -20,7 +20,7 @@ public class Percolation {
         this.cols = n;
         this.grid = new boolean[n * n];
         this.fullyConnectedUf = new WeightedQuickUnionUF(n * n + 2);
-        this.topOnlyConnectedUf = new WeightedQuickUnionUF(n * n + 2);
+        this.topOnlyConnectedUf = new WeightedQuickUnionUF(n * n + 1);
         this.virtualTopIndex = n * n;
         this.virtualBottomIndex = n * n + 1;
         this.openSites = 0;
