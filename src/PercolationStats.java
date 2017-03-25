@@ -6,10 +6,32 @@
  *
  ******************************************************************************/
 
+import edu.princeton.cs.algs4.StdRandom;
+
 public class PercolationStats {
     public PercolationStats(int n, int trials) {
         // perform trials independent experiments on an n-by-n grid
-        if (n <= 0 || trials <= 0) throw new java.lang.IllegalArgumentException();
+        if (n <= 0 || trials <= 0) throw new java.lang.IllegalArgumentException("Pass n and T as arguments");
+
+        for (int i = 0; i < trials; i++) {
+            this.performTrial(n);
+        }
+    }
+
+    private void performTrial(int n) {
+        Percolation p = new Percolation(n);
+
+        while (!p.percolates()) {
+            int siteRow = StdRandom.uniform(n) + 1;
+            int siteCol = StdRandom.uniform(n) + 1;
+
+            if (!p.isOpen(siteRow, siteCol)) {
+                p.open(siteRow, siteCol);
+
+                System.out.println("Opened: " + p.numberOfOpenSites());
+                System.out.println("Percolates: " + p.percolates());
+            }
+        }
     }
 
     public double mean() {
@@ -37,14 +59,11 @@ public class PercolationStats {
     }
 
     public static void main(String[] args) {
-        Percolation p = new Percolation(3);
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
 
-        p.open(1, 2);
-        p.open(2, 1);
-        p.open(2, 2);
-        p.open(3, 2);
+        System.out.println("Performing " + trials + " trials on grids of side: " + n);
 
-        System.out.println("Opened: " + p.numberOfOpenSites());
-        System.out.println("Percolates: " + p.percolates());
+        new PercolationStats(n, trials);
     }
 }
