@@ -11,6 +11,22 @@ public class Percolation {
     private int virtualTopIndex;
     private int virtualBottomIndex;
 
+    public int getVirtualTopIndex() {
+        return virtualTopIndex;
+    }
+
+    public void setVirtualTopIndex(int virtualTopIndex) {
+        this.virtualTopIndex = virtualTopIndex;
+    }
+
+    public int getVirtualBottomIndex() {
+        return virtualBottomIndex;
+    }
+
+    public void setVirtualBottomIndex(int virtualBottomIndex) {
+        this.virtualBottomIndex = virtualBottomIndex;
+    }
+
     private boolean areIndexesInRange(int row, int col){
         if (row > 0 &&
             row <= this.cols &&
@@ -47,10 +63,6 @@ public class Percolation {
         this.uf = new WeightedQuickUnionUF(n * n + 2);
         this.setVirtualTopIndex(n * n);
         this.setVirtualBottomIndex(n * n + 1);
-
-        for (int x = 0; x < n * n; x++) {
-            this.grid[x] = false; // all sites blocked
-        }
 
         // Connect virtual top to first row
         for(int i = 0; i < this.cols - 1; i++) this.uf.union(this.getVirtualTopIndex(), i);
@@ -109,28 +121,12 @@ public class Percolation {
         System.out.println("Percolation");
         Percolation p = new Percolation(3);
 
-        p.open(1, 3);
+        p.open(1, 2);
         p.open(2, 1);
         p.open(2, 2);
         p.open(3, 2);
 
         System.out.println("Opened: " + p.numberOfOpenSites());
         System.out.println("Percolates: " + p.percolates());
-    }
-
-    public int getVirtualTopIndex() {
-        return virtualTopIndex;
-    }
-
-    public void setVirtualTopIndex(int virtualTopIndex) {
-        this.virtualTopIndex = virtualTopIndex;
-    }
-
-    public int getVirtualBottomIndex() {
-        return virtualBottomIndex;
-    }
-
-    public void setVirtualBottomIndex(int virtualBottomIndex) {
-        this.virtualBottomIndex = virtualBottomIndex;
     }
 }
