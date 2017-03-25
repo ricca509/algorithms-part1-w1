@@ -32,19 +32,19 @@ public class Percolation {
         for (int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.getVirtualBottomIndex(), i);
     }
 
-    public int getVirtualTopIndex() {
+    private int getVirtualTopIndex() {
         return virtualTopIndex;
     }
 
-    public void setVirtualTopIndex(int virtualTopIndex) {
+    private void setVirtualTopIndex(int virtualTopIndex) {
         this.virtualTopIndex = virtualTopIndex;
     }
 
-    public int getVirtualBottomIndex() {
+    private int getVirtualBottomIndex() {
         return virtualBottomIndex;
     }
 
-    public void setVirtualBottomIndex(int virtualBottomIndex) {
+    private void setVirtualBottomIndex(int virtualBottomIndex) {
         this.virtualBottomIndex = virtualBottomIndex;
     }
 
