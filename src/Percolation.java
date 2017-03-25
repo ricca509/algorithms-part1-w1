@@ -14,6 +14,7 @@ public class Percolation {
     private int cols;
     private int virtualTopIndex;
     private int virtualBottomIndex;
+    private int openSites;
 
     public Percolation(int n) {
         // create n-by-n grid, with all sites blocked
@@ -25,6 +26,7 @@ public class Percolation {
         this.uf = new WeightedQuickUnionUF(n * n + 2);
         this.virtualTopIndex = n * n;
         this.virtualBottomIndex = n * n + 1;
+        this.openSites = 0;
 
         // Connect virtual top to first row
         for (int i = 0; i < this.cols; i++) this.uf.union(this.virtualTopIndex, i);
@@ -33,14 +35,7 @@ public class Percolation {
     }
 
     private boolean areIndexesInRange(int row, int col) {
-        if (row > 0 &&
-            row <= this.cols &&
-            col > 0 &&
-            col <= this.cols) {
-            return true;
-        }
-
-        return false;
+        return row > 0 && row <= this.cols && col > 0 && col <= this.cols;
     }
 
     private int xyTo1D(int row, int col) {
@@ -48,14 +43,12 @@ public class Percolation {
     }
 
     private int[][] getAdjacentSites(int row, int col) {
-        int[][] adjacents = new int[][]{
+        return new int[][]{
             {row - 1, col},
             {row + 1, col},
             {row, col - 1},
             {row, col + 1}
         };
-
-        return adjacents;
     }
 
     public void open(int row, int col) {
@@ -66,6 +59,7 @@ public class Percolation {
 
         // open site (row, col)
         this.grid[pointToBeOpened] = true;
+        this.openSites++;
         // Connect it to all open adjacent sites:
         int[][] adjacents = this.getAdjacentSites(row, col);
 
@@ -87,20 +81,12 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
-        int point = this.xyTo1D(row, col);
 
-        boolean connected = this.uf.connected(point, this.virtualTopIndex);
-
-        return this.isOpen(row, col) && connected;
+        return this.isOpen(row, col) && this.uf.connected(this.xyTo1D(row, col), this.virtualTopIndex);
     }
 
     public int numberOfOpenSites() {
-        int opened = 0;
-        for (boolean elem : this.grid) {
-            if (elem) opened++;
-        }
-
-        return opened;
+        return this.openSites;
     }
 
     public boolean percolates() {
