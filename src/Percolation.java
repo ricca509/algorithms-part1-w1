@@ -123,14 +123,5 @@ public class Percolation {
 
     public static void main(String[] args) {
         System.out.println("Percolation");
-        Percolation p = new Percolation(3);
-
-        p.open(1, 2);
-        p.open(2, 1);
-        p.open(2, 2);
-        p.open(3, 2);
-
-        System.out.println("Opened: " + p.numberOfOpenSites());
-        System.out.println("Percolates: " + p.percolates());
     }
 }
