@@ -11,14 +11,12 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private int[] x;
-    private int t;
 
     public PercolationStats(int n, int trials) {
         // perform trials independent experiments on an n-by-n grid
         if (n <= 0 || trials <= 0) throw new java.lang.IllegalArgumentException("Pass n and t as arguments");
 
         this.x = new int[trials];
-        this.t = trials;
 
         for (int i = 0; i < trials; i++) {
             int openSitesWhenPercolates = this.performTrial(n);
@@ -53,12 +51,12 @@ public class PercolationStats {
 
     public double confidenceLo() {
         // low  endpoint of 95% confidence interval
-        return this.mean() - (1.96 * this.stddev() / Math.sqrt(this.t));
+        return this.mean() - (1.96 * this.stddev() / Math.sqrt(this.x.length));
     }
 
     public double confidenceHi() {
         // high endpoint of 95% confidence interval
-        return this.mean() + (1.96 * this.stddev() / Math.sqrt(this.t));
+        return this.mean() + (1.96 * this.stddev() / Math.sqrt(this.x.length));
     }
 
     public static void main(String[] args) {
