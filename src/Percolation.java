@@ -27,9 +27,9 @@ public class Percolation {
         this.virtualBottomIndex = n * n + 1;
 
         // Connect virtual top to first row
-        for (int i = 0; i < this.cols - 1; i++) this.uf.union(this.virtualTopIndex, i);
+        for (int i = 0; i < this.cols; i++) this.uf.union(this.virtualTopIndex, i);
         // Connect virtual bottom to last row
-        for (int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.virtualBottomIndex, i);
+        for (int i = n * n - this.cols; i < n * n; i++) this.uf.union(this.virtualBottomIndex, i);
     }
 
     private boolean areIndexesInRange(int row, int col) {
