@@ -11,6 +11,23 @@ public class Percolation {
     private int virtualTopIndex;
     private int virtualBottomIndex;
 
+    public Percolation(int n) {
+        // create n-by-n grid, with all sites blocked
+        if (n <= 0)
+            throw new IllegalArgumentException("n needs to be > 0");
+
+        this.cols = n;
+        this.grid = new boolean[n * n];
+        this.uf = new WeightedQuickUnionUF(n * n + 2);
+        this.setVirtualTopIndex(n * n);
+        this.setVirtualBottomIndex(n * n + 1);
+
+        // Connect virtual top to first row
+        for (int i = 0; i < this.cols - 1; i++) this.uf.union(this.getVirtualTopIndex(), i);
+        // Connect virtual bottom to last row
+        for (int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.getVirtualBottomIndex(), i);
+    }
+
     public int getVirtualTopIndex() {
         return virtualTopIndex;
     }
@@ -27,7 +44,7 @@ public class Percolation {
         this.virtualBottomIndex = virtualBottomIndex;
     }
 
-    private boolean areIndexesInRange(int row, int col){
+    private boolean areIndexesInRange(int row, int col) {
         if (row > 0 &&
             row <= this.cols &&
             col > 0 &&
@@ -53,23 +70,6 @@ public class Percolation {
         return adjacents;
     }
 
-    public Percolation(int n) {
-        // create n-by-n grid, with all sites blocked
-        if (n <= 0)
-            throw new IllegalArgumentException("n needs to be > 0");
-
-        this.cols = n;
-        this.grid = new boolean[n * n];
-        this.uf = new WeightedQuickUnionUF(n * n + 2);
-        this.setVirtualTopIndex(n * n);
-        this.setVirtualBottomIndex(n * n + 1);
-
-        // Connect virtual top to first row
-        for(int i = 0; i < this.cols - 1; i++) this.uf.union(this.getVirtualTopIndex(), i);
-        // Connect virtual bottom to last row
-        for(int i = n * n - this.cols; i < n * n - 1; i++) this.uf.union(this.getVirtualBottomIndex(), i);
-    }
-
     public void open(int row, int col) {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
         int pointToBeOpened = this.xyTo1D(row, col);
@@ -80,7 +80,7 @@ public class Percolation {
         int[][] adjacents = this.getAdjacentSites(row, col);
 
         for (int[] adjacent : adjacents) {
-            if (this.areIndexesInRange(adjacent[0],adjacent[1]) &&
+            if (this.areIndexesInRange(adjacent[0], adjacent[1]) &&
                 this.isOpen(adjacent[0], adjacent[1])) {
                 int adjacentOpenSite = this.xyTo1D(adjacent[0], adjacent[1]);
 
@@ -107,7 +107,7 @@ public class Percolation {
     public int numberOfOpenSites() {
         int opened = 0;
         for (boolean elem : this.grid) {
-            if (elem) { opened++; }
+            if (elem) opened++;
         }
 
         return opened;
