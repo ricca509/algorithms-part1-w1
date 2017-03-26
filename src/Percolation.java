@@ -29,7 +29,7 @@ public class Percolation {
         this.openSites = 0;
     }
 
-    private void connectVirtualEdges(int point) {
+    private void connectToVirtualEdges(int point) {
         if (point >= 0 && point < this.cols) {
             // Connect virtual top to first row
             this.fullyConnectedUf.union(this.virtualTopIndex, point);
@@ -76,7 +76,7 @@ public class Percolation {
             }
         }
 
-        this.connectVirtualEdges(pointToBeOpened);
+        this.connectToVirtualEdges(pointToBeOpened);
     }
 
     private boolean isOpen(int n) {
