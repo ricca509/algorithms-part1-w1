@@ -10,17 +10,17 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private int[] x;
+    private double[] x;
 
     public PercolationStats(int n, int trials) {
         // perform trials independent experiments on an n-by-n grid
         if (n <= 0 || trials <= 0) throw new java.lang.IllegalArgumentException("Pass n and t as arguments");
 
-        this.x = new int[trials];
+        this.x = new double[trials];
 
         for (int i = 0; i < trials; i++) {
             int openSitesWhenPercolates = this.performTrial(n);
-            x[i] = openSitesWhenPercolates;
+            x[i] = (double)openSitesWhenPercolates / (n * n);
         }
     }
 
@@ -41,12 +41,12 @@ public class PercolationStats {
 
     public double mean() {
         // sample mean of percolation threshold
-        return StdStats.mean(this.x) / 100;
+        return StdStats.mean(this.x);
     }
 
     public double stddev() {
         // sample standard deviation of percolation threshold
-        return StdStats.stddev(this.x) / 100;
+        return StdStats.stddev(this.x);
     }
 
     public double confidenceLo() {

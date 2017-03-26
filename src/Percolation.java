@@ -86,7 +86,7 @@ public class Percolation {
     public boolean isOpen(int row, int col) {
         if (!this.areIndexesInRange(row, col)) throw new java.lang.IndexOutOfBoundsException();
 
-        return this.grid[this.xyTo1D(row, col)];
+        return this.isOpen(this.xyTo1D(row, col));
     }
 
     public boolean isFull(int row, int col) {
